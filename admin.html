@@ -1,24 +1,36 @@
 <!doctype html>
-<html lang="de">
+<html lang="de" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Admin VP</title>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('vp3d-adm-theme')||'dark'}catch(e){}</script>
 <style>
 :root{
-  --side:#0f1b33; --side-2:#16264a; --side-ink:#dfe6f3; --side-muted:#8e9cb8;
-  --bg:#f3f6fb; --card:#ffffff; --ink:#101828; --muted:#5b6476; --line:#e4e9f2;
-  --blue:#1769e8; --blue-soft:#e8f0fd; --green:#16a34a; --green-soft:#e7f6ec; --orange:#f08c00; --orange-soft:#fff3e2;
-  --red:#e03131; --red-soft:#fdecec; --violet:#6d3fd8; --violet-soft:#f1ebfd; --grey:#c9d0dc;
-  --r:14px; color-scheme:light;
+  --r:14px; --gold:#c9a45c; --gold-2:#e3c88a; --on-acc:#1a1408;
+  --green:#2f9e5b; --orange:#e08a12; --red:#d64545; --grey:#8f8a80;
+}
+:root,[data-theme=dark]{ color-scheme:dark;
+  --side:#0b0b0d; --side-2:#1d1b17; --side-ink:#ece6d8; --side-muted:#9b937f;
+  --bg:#111113; --card:#19191c; --soft:#222226; --hover:#211f1b; --ink:#ece7dc; --muted:#a39d90; --line:#2d2c30;
+  --acc:#d4b06a; --acc-soft:#2a2316; --acc-ink:#e2c487;
+  --green-soft:#132519; --orange-soft:#2a2011; --red-soft:#2c1616; --off-soft:#26262a;
+  --chart-grid:#2b2a2e; --shadow:#0008;
+}
+[data-theme=light]{ color-scheme:light;
+  --side:#16130e; --side-2:#2a241a; --side-ink:#f1ead9; --side-muted:#a99e86;
+  --bg:#f6f2ea; --card:#ffffff; --soft:#f3ede1; --hover:#faf6ee; --ink:#1e1a13; --muted:#6b6355; --line:#e7dfcf;
+  --acc:#c9a45c; --acc-soft:#f7efdc; --acc-ink:#8a6a24;
+  --green-soft:#e6f4eb; --orange-soft:#fdf1df; --red-soft:#fbe9e9; --off-soft:#efede8;
+  --chart-grid:#ece5d6; --shadow:#2a20101f;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{margin:0; height:100%}
 body{background:var(--bg); color:var(--ink); font:15px/1.45 "Segoe UI",system-ui,-apple-system,sans-serif}
 button,input,select,textarea{font:inherit; color:inherit}
-a{color:var(--blue)}
+a{color:var(--acc-ink)}
 h1,h2,h3{margin:0}
 .muted{color:var(--muted); font-size:.86rem}
 .mono{font-family:ui-monospace,Menlo,monospace; font-size:.82rem}
@@ -26,69 +38,73 @@ h1,h2,h3{margin:0}
 .app{display:grid; grid-template-columns:248px 1fr; min-height:100vh}
 .side{background:var(--side); color:var(--side-ink); display:flex; flex-direction:column; padding:18px 12px; position:sticky; top:0; height:100vh}
 .brand{display:flex; align-items:center; gap:12px; padding:6px 8px 22px}
-.brand .lg{width:46px; height:46px; border-radius:50%; background:#fff url(vp3d.png) center/80% no-repeat; flex:none}
+.brand .lg{width:46px; height:46px; border-radius:50%; background:#000 url(vp3d.png) center/80% no-repeat; border:1px solid var(--gold); flex:none}
+.brand b{color:var(--gold-2)}
 .brand b{display:block; font-size:1.05rem} .brand span{font-size:.8rem; color:var(--side-muted)}
 .nav{display:grid; gap:4px}
 .nav button{display:flex; align-items:center; gap:14px; width:100%; background:none; border:0; color:var(--side-ink); padding:11px 14px; border-radius:10px; cursor:pointer; text-align:left; font-size:.95rem}
 .nav button:hover{background:var(--side-2)}
-.nav button[aria-current=page]{background:var(--blue); color:#fff}
+.nav button[aria-current=page]{background:linear-gradient(135deg,var(--gold-2),var(--gold)); color:var(--on-acc); font-weight:600}
 .nav svg{width:20px; height:20px; flex:none}
-.nav hr{border:0; border-top:1px solid #ffffff1f; margin:10px 6px}
+.nav hr{border:0; border-top:1px solid #ffffff1a; margin:10px 6px}
 .main{padding:22px 28px 40px; min-width:0}
 .head{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px}
 .head h1{font-size:1.7rem; font-weight:700} .head p{margin:4px 0 0; color:var(--muted)}
 .user{display:flex; align-items:center; gap:14px}
-.avatar{width:38px; height:38px; border-radius:50%; background:#d5dbe6; display:grid; place-items:center; color:#6b7385; font-weight:700}
+.avatar{width:38px; height:38px; border-radius:50%; background:var(--soft); display:grid; place-items:center; color:var(--muted); font-weight:700}
 .bell{position:relative; background:none; border:0; cursor:pointer; padding:6px; color:var(--muted)}
 .bell svg{width:24px; height:24px}
 .bell i{position:absolute; top:0; right:0; background:var(--red); color:#fff; font-style:normal; font-size:.7rem; font-weight:700; min-width:18px; height:18px; border-radius:9px; display:grid; place-items:center; padding:0 4px}
-.pop{position:absolute; right:0; top:44px; width:320px; background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:0 12px 32px #10182822; z-index:20; padding:8px}
+.pop{position:absolute; right:0; top:44px; width:320px; background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:0 12px 32px var(--shadow); z-index:20; padding:8px}
 .pop .it{display:flex; gap:10px; padding:9px; border-radius:8px; cursor:pointer} .pop .it:hover{background:var(--bg)}
 .menuBtn{display:none; background:none; border:0; padding:6px; cursor:pointer}
 /* ---------- Cards ---------- */
-.stats{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:18px}
+.stats{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:16px; margin-bottom:18px}
 .stat{border-radius:var(--r); padding:18px; display:flex; gap:14px; align-items:center; border:1px solid transparent; position:relative}
 .stat svg{width:46px; height:46px; flex:none}
 .stat b{display:block; font-size:1.8rem; line-height:1.1; font-variant-numeric:tabular-nums}
-.stat span{font-size:.88rem; color:#3b4456}
-.stat em{position:absolute; top:14px; right:16px; font-style:normal; font-size:.82rem; font-weight:700}
-.s1{background:var(--blue-soft); border-color:#d3e2fb} .s1 svg,.s1 em{color:var(--blue)}
-.s2{background:var(--green-soft); border-color:#cdebd7} .s2 svg,.s2 em{color:var(--green)}
-.s3{background:var(--orange-soft); border-color:#fbe0bb} .s3 svg,.s3 em{color:var(--orange)}
-.s4{background:var(--violet-soft); border-color:#e2d6fb} .s4 svg,.s4 em{color:var(--violet)}
+.stat span{font-size:.88rem; color:var(--muted)}
+.stat em{display:block; font-style:normal; font-size:.8rem; font-weight:700; margin-top:2px}
+.stat{background:var(--card); border-color:var(--line)} .stat::before{content:""; position:absolute; inset:0 auto 0 0; width:4px; border-radius:var(--r) 0 0 var(--r)}
+.s1::before{background:var(--acc)} .s2::before{background:var(--green)} .s3::before{background:var(--orange)} .s4::before,.s5::before{background:var(--gold-2)}
+.s1 .s1 svg,.s1 em{color:var(--acc)}
+ .s2 .s2 svg,.s2 em{color:var(--green)}
+ .s3 .s3 svg,.s3 em{color:var(--orange)}
+ .s4 .s4 svg,.s4 em,.s5 svg,.s5 em{color:var(--acc-ink)}
 .grid2{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px; margin-bottom:16px}
 .grid2b{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:16px}
 .card{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:18px; min-width:0}
 .ch{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; flex-wrap:wrap}
 .ch h2{font-size:1.2rem; display:flex; align-items:center; gap:10px}
-.ch h2 svg{width:24px; height:24px; color:var(--blue)}
-.btn{display:inline-flex; align-items:center; gap:8px; border:0; border-radius:9px; padding:9px 16px; background:var(--blue); color:#fff; font-weight:600; cursor:pointer; white-space:nowrap; text-decoration:none}
+.ch h2 svg{width:24px; height:24px; color:var(--acc-ink)}
+.btn{display:inline-flex; align-items:center; gap:8px; border:0; border-radius:9px; padding:9px 16px; background:linear-gradient(135deg,var(--gold-2),var(--gold)); color:var(--on-acc); font-weight:600; cursor:pointer; white-space:nowrap; text-decoration:none}
 .btn svg{width:18px; height:18px}
-.btn.ghost{background:#fff; color:var(--ink); border:1px solid var(--line)}
-.btn.red{background:var(--red)} .btn.sm{padding:6px 12px; font-size:.85rem}
+.btn.ghost{background:var(--card); color:var(--ink); border:1px solid var(--line)}
+.btn.red{background:var(--red); color:#fff} .btn.sm{padding:6px 12px; font-size:.85rem}
 .btn:disabled{opacity:.5; cursor:default}
-.ib{width:34px; height:34px; border-radius:8px; display:inline-grid; place-items:center; border:1px solid var(--line); background:#fff; cursor:pointer; color:var(--muted)}
+.ib{width:34px; height:34px; border-radius:8px; display:inline-grid; place-items:center; border:1px solid var(--line); background:var(--card); cursor:pointer; color:var(--muted)}
 .ib svg{width:17px; height:17px}
-.ib.e{background:var(--blue); border-color:var(--blue); color:#fff} .ib.d{background:var(--red); border-color:var(--red); color:#fff}
+.ib.e{background:var(--acc); border-color:var(--acc); color:var(--on-acc)} .ib.d{background:var(--red); border-color:var(--red); color:#fff}
 .search{position:relative; margin-bottom:12px}
-.search input{width:100%; padding:10px 12px 10px 40px; border:1px solid var(--line); border-radius:10px; background:#fff}
+.search input{width:100%; padding:10px 12px 10px 40px; border:1px solid var(--line); border-radius:10px; background:var(--card)}
 .search svg{position:absolute; left:12px; top:50%; translate:0 -50%; width:18px; height:18px; color:var(--muted)}
 table{width:100%; border-collapse:collapse}
-th{text-align:left; font-size:.85rem; font-weight:700; color:var(--ink); background:#f1f4f9; padding:10px}
+th{text-align:left; font-size:.85rem; font-weight:700; color:var(--ink); background:var(--soft); padding:10px}
 td{padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:middle}
-tr.row{cursor:pointer} tr.row:hover td{background:#f8fafd} tr.row.sel td{background:var(--blue-soft)}
+tr.row{cursor:pointer} tr.row:hover td{background:var(--hover)} tr.row.sel td{background:var(--acc-soft)}
 .acts{display:flex; gap:6px}
 .pill{display:inline-block; padding:3px 11px; border-radius:999px; font-size:.8rem; font-weight:600; white-space:nowrap}
-.pill.ok{background:var(--green-soft); color:var(--green)} .pill.warn{background:var(--orange-soft); color:#c46a00} .pill.bad{background:var(--red-soft); color:var(--red)} .pill.off{background:#eef1f5; color:#6b7385}
+.pill.ok{background:var(--green-soft); color:var(--green)} .pill.warn{background:var(--orange-soft); color:var(--orange)} .pill.bad{background:var(--red-soft); color:var(--red)} .pill.off{background:var(--off-soft); color:var(--muted)}
+.pill.gold{background:var(--acc-soft); color:var(--acc-ink)}
 .pager{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap}
 .pager .pg{display:flex; gap:6px}
-.pager button{min-width:38px; height:38px; border-radius:9px; border:1px solid var(--line); background:#fff; cursor:pointer}
-.pager button[aria-current=true]{background:var(--blue); color:#fff; border-color:var(--blue)}
+.pager button{min-width:38px; height:38px; border-radius:9px; border:1px solid var(--line); background:var(--card); cursor:pointer}
+.pager button[aria-current=true]{background:var(--acc); color:var(--on-acc); border-color:var(--acc)}
 /* Detail */
 .det{display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap}
-.det .logo{width:170px; height:130px; border-radius:10px; background:#f1f4f9; display:grid; place-items:center; overflow:hidden; flex:none}
+.det .logo{width:170px; height:130px; border-radius:10px; background:var(--soft); display:grid; place-items:center; overflow:hidden; flex:none}
 .det .logo img{max-width:88%; max-height:84%; object-fit:contain}
-.det .logo span{font-weight:800; font-size:1.3rem; color:#2a3a6a; text-align:center; padding:8px}
+.det .logo span{font-weight:800; font-size:1.3rem; color:var(--acc-ink); text-align:center; padding:8px}
 .det h3{font-size:1.35rem; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
 .det ul{list-style:none; padding:0; margin:12px 0 0; display:grid; gap:7px}
 .det li{display:flex; gap:10px; align-items:center; min-width:0} .det li a{overflow-wrap:anywhere; min-width:0} .det li svg{width:18px; height:18px; color:var(--muted)}
@@ -99,7 +115,7 @@ tr.row{cursor:pointer} tr.row:hover td{background:#f8fafd} tr.row.sel td{backgro
 .chk li{display:flex; gap:10px; align-items:center}
 .chk li i{width:20px; height:20px; border-radius:50%; display:grid; place-items:center; font-style:normal; color:#fff; font-size:.75rem; flex:none}
 .chk li i.y{background:var(--green)} .chk li i.n{background:var(--grey)}
-.prev{border:1px solid var(--line); border-radius:10px; overflow:hidden; height:150px; position:relative; background:#eef1f5}
+.prev{border:1px solid var(--line); border-radius:10px; overflow:hidden; height:150px; position:relative; background:var(--off-soft)}
 .prev iframe{width:1280px; height:780px; border:0; transform:scale(.195); transform-origin:0 0; pointer-events:none}
 .prev a{position:absolute; inset:0}
 .empty{padding:30px; text-align:center; color:var(--muted)}
@@ -109,37 +125,44 @@ tr.row{cursor:pointer} tr.row:hover td{background:#f8fafd} tr.row.sel td{backgro
 .donut svg{width:180px; height:180px}
 .leg{list-style:none; padding:0; margin:0; display:grid; gap:12px; font-size:1rem}
 .leg li{display:flex; align-items:center; gap:10px} .leg i{width:12px; height:12px; border-radius:50%}
-select.sm{padding:7px 10px; border:1px solid var(--line); border-radius:9px; background:#fff}
+select.sm{padding:7px 10px; border:1px solid var(--line); border-radius:9px; background:var(--card)}
 /* Forms + dialog */
 label{display:flex; flex-direction:column; gap:4px; font-size:.82rem; color:var(--muted)}
-input,select,textarea{background:#fff; border:1px solid var(--line); border-radius:9px; padding:9px 11px; color:var(--ink); font-size:.95rem; min-width:0}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--blue); outline-offset:1px}
+input,select,textarea{background:var(--card); border:1px solid var(--line); border-radius:9px; padding:9px 11px; color:var(--ink); font-size:.95rem; min-width:0}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc); outline-offset:1px}
 .fg{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px}
 .full{grid-column:1/-1}
-dialog{border:0; border-radius:16px; padding:0; width:min(860px,calc(100vw - 24px)); max-height:calc(100vh - 24px); box-shadow:0 24px 60px #10182840}
-dialog::backdrop{background:#0f1b3399}
-.dh{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:16px 20px; border-bottom:1px solid var(--line); position:sticky; top:0; background:#fff; z-index:1}
+dialog{background:var(--card); color:var(--ink); border:0; border-radius:16px; padding:0; width:min(860px,calc(100vw - 24px)); max-height:calc(100vh - 24px); box-shadow:0 24px 60px var(--shadow)}
+dialog::backdrop{background:#000a}
+.dh{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:16px 20px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--card); z-index:1}
 .db{padding:8px 20px 20px}
-.df{display:flex; gap:10px; justify-content:flex-end; padding:14px 20px; border-top:1px solid var(--line); position:sticky; bottom:0; background:#fff; flex-wrap:wrap; align-items:center}
+.df{display:flex; gap:10px; justify-content:flex-end; padding:14px 20px; border-top:1px solid var(--line); position:sticky; bottom:0; background:var(--card); flex-wrap:wrap; align-items:center}
 .tabs{display:flex; gap:4px; border-bottom:1px solid var(--line); margin:4px 0 14px; overflow-x:auto}
 .tabs button{background:none; border:0; border-bottom:2px solid transparent; padding:10px 12px; color:var(--muted); cursor:pointer; white-space:nowrap; font-weight:600}
-.tabs button[aria-selected=true]{color:var(--blue); border-bottom-color:var(--blue)}
+.tabs button[aria-selected=true]{color:var(--acc-ink); border-bottom-color:var(--acc)}
 .msg{font-size:.88rem; color:var(--red); min-height:1.2em} .msg.ok{color:var(--green)}
 .list{display:grid; gap:8px}
-.li{display:flex; justify-content:space-between; align-items:center; gap:10px; background:#f8fafd; border:1px solid var(--line); border-radius:10px; padding:9px 12px; flex-wrap:wrap}
+.li{display:flex; justify-content:space-between; align-items:center; gap:10px; background:var(--hover); border:1px solid var(--line); border-radius:10px; padding:9px 12px; flex-wrap:wrap}
 .copy{display:flex; gap:8px} .copy input{flex:1}
 h4{margin:16px 0 8px; font-size:1rem}
 /* Login */
-.login{max-width:400px; margin:12vh auto 0; background:#fff; border:1px solid var(--line); border-radius:16px; padding:28px; display:grid; gap:14px}
-.login .lg{width:150px; height:52px; background:url(vp3d.png) left center/contain no-repeat; filter:drop-shadow(0 1px 1px #0004)}
-.toast{position:fixed; bottom:20px; left:50%; translate:-50% 0; background:var(--ink); color:#fff; padding:10px 18px; border-radius:10px; z-index:50; font-size:.92rem}
-@media (max-width:1180px){ .stats{grid-template-columns:repeat(2,minmax(0,1fr))} .grid2,.grid2b{grid-template-columns:1fr} }
+.login{max-width:400px; margin:12vh auto 0; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:28px; display:grid; gap:14px}
+.login .lg{width:150px; height:52px; background:url(vp3d.png) left center/contain no-repeat}
+[data-theme=light] .login .lg{filter:drop-shadow(0 0 1px #000a)}
+.tgl{background:var(--card); border:1px solid var(--line); border-radius:999px; padding:6px 12px; cursor:pointer; display:inline-flex; gap:8px; align-items:center; color:var(--ink); font-size:.85rem}
+.tgl svg{width:18px; height:18px; color:var(--acc-ink)}
+.bars{display:grid; gap:10px} .bar{display:grid; grid-template-columns:minmax(120px,1.2fr) 3fr minmax(150px,260px); gap:12px; align-items:center; cursor:pointer}
+.bar .tr{height:12px; background:var(--soft); border-radius:6px; overflow:hidden; display:flex} .bar .tr i{display:block; height:100%} .bar small{color:var(--muted)} .bar > span{text-align:right} @media (max-width:820px){ .bar{grid-template-columns:1fr auto} .bar .tr{grid-column:1/-1; grid-row:2} }
+.kpis{display:flex; gap:18px; flex-wrap:wrap; margin:10px 0 0; font-size:.9rem} .kpis b{color:var(--acc-ink)}
+.toast{position:fixed; bottom:20px; left:50%; translate:-50% 0; background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:10px; z-index:50; font-size:.92rem}
+@media (max-width:1400px){ #dashStats{grid-template-columns:repeat(3,minmax(0,1fr))} }
+@media (max-width:1180px){ .stats,#dashStats{grid-template-columns:repeat(2,minmax(0,1fr))} .grid2,.grid2b{grid-template-columns:1fr} }
 @media (max-width:820px){
   .app{grid-template-columns:1fr} .side{position:fixed; inset:0 auto 0 0; width:248px; z-index:40; translate:-100% 0; transition:translate .2s}
   .side.open{translate:0 0} .menuBtn{display:block} .main{padding:16px} .head h1{font-size:1.35rem}
   .chk{grid-template-columns:1fr} .hide-s{display:none} .user .nm{display:none}
 }
-@media (max-width:520px){ .stats{grid-template-columns:1fr} td,th{padding:8px 6px} }
+@media (max-width:520px){ .stats,#dashStats{grid-template-columns:1fr} td,th{padding:8px 6px} }
 </style>
 </head>
 <body>
@@ -165,6 +188,8 @@ h4{margin:16px 0 8px; font-size:1rem}
   <symbol id="i-card" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5h18v14H3Zm2 2v2h14V7Zm0 5v5h14v-5Zm2 2h5v1.5H7Z"/></symbol>
   <symbol id="i-euro" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 18.5A6.5 6.5 0 0 1 9.4 14H15l1-2H9.1a6 6 0 0 1 0-1H16l1-2H9.4a6.5 6.5 0 0 1 10.1-3.2V3.4A9 9 0 0 0 6.8 9H4l-1 2h3.6v1H4l-1 2h3.8A9 9 0 0 0 19.5 19v-2.4a6.5 6.5 0 0 1-4 1.9Z"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4v5l3.5 2"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10ZM11 1h2v3h-2Zm0 19h2v3h-2ZM1 11h3v2H1Zm19 0h3v2h-3ZM4.2 2.8l2.1 2.1-1.4 1.4-2.1-2.1Zm14.9 14.9 2.1 2.1-1.4 1.4-2.1-2.1ZM2.8 19.8l2.1-2.1 1.4 1.4-2.1 2.1ZM17.7 4.9l2.1-2.1 1.4 1.4-2.1 2.1Z"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path fill="currentColor" d="M12.3 2a9 9 0 1 0 9.7 11.4A7.5 7.5 0 0 1 12.3 2Z"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6h18v2H3Zm0 5h18v2H3Zm0 5h18v2H3Z"/></symbol>
 </svg>
 
@@ -209,6 +234,7 @@ h4{margin:16px 0 8px; font-size:1rem}
       <div style="display:flex;gap:10px;align-items:flex-start"><button class="menuBtn" id="menuBtn" aria-label="Menü"><svg width="26" height="26"><use href="#i-menu"/></svg></button>
         <div><h1 id="pTitle">Übersicht</h1><p id="pSub">Überblick und Verwaltung Ihrer Kunden</p></div></div>
       <div class="user">
+        <button class="tgl" id="tgl" type="button"></button>
         <div class="avatar" id="avatar">A</div><span class="nm" id="who">Administrator</span>
         <div style="position:relative"><button class="bell" id="bell" aria-label="Benachrichtigungen"><svg><use href="#i-bell"/></svg><i id="bellN" hidden>0</i></button><div class="pop" id="pop" hidden></div></div>
       </div>
@@ -216,17 +242,18 @@ h4{margin:16px 0 8px; font-size:1rem}
 
     <!-- Übersicht -->
     <section data-view="dash">
-      <div class="stats">
-        <div class="stat s1"><svg><use href="#i-users"/></svg><div><b id="sAll">0</b><span>Kunden gesamt</span></div><em id="dAll"></em></div>
-        <div class="stat s2"><svg><use href="#i-cal"/></svg><div><b id="sLive">0</b><span>Aktive Abonnements</span></div><em id="dLive"></em></div>
-        <div class="stat s3"><svg><use href="#i-clock"/></svg><div><b id="sDue">0</b><span>Laufen bald ab (≤ 7 Tage)</span></div><em id="dDue"></em></div>
-        <div class="stat s4"><svg><use href="#i-euro"/></svg><div><b id="sMrr">0 €</b><span>Einnahmen pro Monat</span></div><em id="dMrr"></em></div>
+      <div class="stats" id="dashStats">
+        <div class="stat s1"><svg><use href="#i-users"/></svg><div><b id="sAll">0</b><span>Kunden gesamt</span><em id="dAll"></em></div></div>
+        <div class="stat s2"><svg><use href="#i-cal"/></svg><div><b id="sLive">0</b><span>Aktive Abonnements</span><em id="dLive"></em></div></div>
+        <div class="stat s3"><svg><use href="#i-clock"/></svg><div><b id="sDue">0</b><span>Laufen bald ab (≤ 7 Tage)</span><em id="dDue"></em></div></div>
+        <div class="stat s4"><svg><use href="#i-euro"/></svg><div><b id="sMrr">0 €</b><span>Einnahmen pro Monat</span><em id="dMrr"></em></div></div>
+        <div class="stat s5"><svg><use href="#i-mail"/></svg><div><b id="sReq">0</b><span>Anfragen diesen Monat</span><em id="dReq"></em></div></div>
       </div>
       <div class="grid2">
         <div class="card">
           <div class="ch"><h2><svg><use href="#i-users"/></svg>Kunden</h2><button class="btn" data-new><svg><use href="#i-plus"/></svg>Kunde hinzufügen</button></div>
           <div class="search"><svg><use href="#i-search"/></svg><input type="search" id="q" placeholder="Nach Namen suchen …" aria-label="Kunden suchen"></div>
-          <div style="overflow-x:auto"><table><thead><tr><th>Firma</th><th>Status</th><th>Abo bis</th><th>Aktionen</th></tr></thead><tbody id="tb"></tbody></table></div>
+          <div style="overflow-x:auto"><table><thead><tr><th>Firma</th><th>Status</th><th>Abo bis</th><th title="Anfragen diesen Monat">Anfr.</th><th>Aktionen</th></tr></thead><tbody id="tb"></tbody></table></div>
           <div class="empty" id="empty" hidden>Noch kein Kunde – mit „Kunde hinzufügen“ starten.</div>
           <div class="pager"><span class="muted" id="pgInfo"></span><div class="pg" id="pg"></div></div>
         </div>
@@ -237,13 +264,19 @@ h4{margin:16px 0 8px; font-size:1rem}
       </div>
       <div class="grid2b">
         <div class="card chart">
-          <div class="ch"><h2><svg><use href="#i-bars"/></svg>Statistik – Einnahmen</h2><select class="sm" id="range" aria-label="Zeitraum"><option value="6">Letzte 6 Monate</option><option value="12">Letzte 12 Monate</option></select></div>
-          <div id="chart"></div>
+          <div class="ch"><h2><svg><use href="#i-bars"/></svg>Statistik</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><select class="sm" id="chartKind" aria-label="Was anzeigen"><option value="rev">Einnahmen</option><option value="req">Anfragen</option><option value="view">Aufrufe</option></select><select class="sm" id="range" aria-label="Zeitraum"><option value="6">Letzte 6 Monate</option><option value="12">Letzte 12 Monate</option></select></div></div>
+          <div id="chart"></div><p class="muted" id="chartSum" style="margin:6px 0 0"></p>
         </div>
         <div class="card">
           <div class="ch"><h2><svg><use href="#i-card"/></svg>Status der Abonnements</h2></div>
           <div class="donut" id="donut"></div>
         </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="ch"><h2><svg><use href="#i-mail"/></svg>Anfragen pro Konfigurator</h2><select class="sm" id="reqRange" aria-label="Zeitraum"><option value="this">Dieser Monat</option><option value="last">Letzter Monat</option><option value="12">Letzte 12 Monate</option></select></div>
+        <div class="kpis" id="reqSum" style="margin:0 0 14px"></div>
+        <div class="bars" id="reqBars"></div>
+        <p class="muted" style="margin:12px 0 0">Anfrage = Kunde hat im Konfigurator ein Angebot als PDF erstellt oder per E-Mail vorbereitet. Aufruf = Besuch des Konfigurators (einmal pro Sitzung). Gezählt wird ab heute, ohne Kundendaten.</p>
       </div>
     </section>
 
@@ -251,7 +284,7 @@ h4{margin:16px 0 8px; font-size:1rem}
     <section data-view="clients" hidden>
       <div class="card">
         <div class="ch"><h2><svg><use href="#i-users"/></svg>Alle Kunden</h2><button class="btn" data-new><svg><use href="#i-plus"/></svg>Kunde hinzufügen</button></div>
-        <div style="overflow-x:auto"><table><thead><tr><th>Firma</th><th>Status</th><th class="hide-s">Kontakt</th><th class="hide-s">Abo</th><th>Abo bis</th><th class="hide-s">Angebote</th><th>Aktionen</th></tr></thead><tbody id="tbAll"></tbody></table></div>
+        <div style="overflow-x:auto"><table><thead><tr><th>Firma</th><th>Status</th><th class="hide-s">Kontakt</th><th class="hide-s">Abo</th><th>Abo bis</th><th class="hide-s">Anfragen Monat / 12 M.</th><th class="hide-s">Aufrufe Monat</th><th>Aktionen</th></tr></thead><tbody id="tbAll"></tbody></table></div>
       </div>
     </section>
 
@@ -365,7 +398,7 @@ h4{margin:16px 0 8px; font-size:1rem}
     </div>
     <div id="t3" hidden>
       <p class="muted">Diese Daten stehen im Kopf der PDF-Angebote und oben im Konfigurator der Firma.</p>
-      <div style="display:flex;gap:12px;align-items:center;margin:8px 0 12px;flex-wrap:wrap"><img id="sLogo" alt="Logo" style="height:56px;max-width:180px;object-fit:contain;background:#f1f4f9;border-radius:8px;padding:4px"><label class="btn ghost sm" style="flex-direction:row;color:var(--ink)">Logo wählen<input type="file" id="sLogoF" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden></label><button class="btn ghost sm" id="sLogoX" type="button">Logo entfernen</button></div>
+      <div style="display:flex;gap:12px;align-items:center;margin:8px 0 12px;flex-wrap:wrap"><img id="sLogo" alt="Logo" style="height:56px;max-width:180px;object-fit:contain;background:var(--soft);border-radius:8px;padding:4px"><label class="btn ghost sm" style="flex-direction:row;color:var(--ink)">Logo wählen<input type="file" id="sLogoF" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden></label><button class="btn ghost sm" id="sLogoX" type="button">Logo entfernen</button></div>
       <div class="fg">
         <label>Name im Angebot<input id="sCoName"></label>
         <label class="full">Adresse<input id="sCoAddr"></label>
@@ -406,7 +439,7 @@ const iso = (dt) => dt.toISOString().slice(0, 10);
 const today = () => iso(new Date());
 const ico = (n) => `<svg><use href="#i-${n}"/></svg>`;
 const toast = (t) => { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); };
-let session = null, companies = [], payments = [], cur = null, curSettings = null, logoData, selId = null, page = 1;
+let session = null, companies = [], payments = [], evs = [], cur = null, curSettings = null, logoData, selId = null, page = 1;
 const PER = 5;
 const defs = (() => { try { return { plan: 'monatlich', price: 49, trial: 14, warn: 7, ...JSON.parse(localStorage.getItem('vp3d-defs') || '{}') }; } catch (e) { return { plan: 'monatlich', price: 49, trial: 14, warn: 7 }; } })();
 
@@ -451,6 +484,10 @@ $('fLogin').onsubmit = async (e) => {
 $('fRecover').onsubmit = async (e) => { e.preventDefault(); try { await api('/auth/v1/user', { method: 'PUT', body: { password: $('rPass').value } }); history.replaceState(null, '', location.pathname); await start(); } catch (err) { $('rMsg').textContent = err.message; } };
 $('bOut').onclick = async () => { try { await api('/auth/v1/logout', { method: 'POST' }); } catch (e) {} logout(); };
 
+/* ---------- Hell / Dunkel ---------- */
+function themeBtn() { const d = document.documentElement.dataset.theme !== 'light'; $('tgl').innerHTML = d ? `${ico('sun')}<span class="hide-s">Hell</span>` : `${ico('moon')}<span class="hide-s">Dunkel</span>`; $('tgl').setAttribute('aria-label', d ? 'Helles Design' : 'Dunkles Design'); }
+$('tgl').onclick = () => { const t = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'; document.documentElement.dataset.theme = t; try { localStorage.setItem('vp3d-adm-theme', t); } catch (e) {} themeBtn(); renderChart(); renderDonut(); if (cur && !$('t5').hidden) loadStats(); };
+themeBtn();
 /* ---------- Navigation ---------- */
 const TITLES = { dash: ['Übersicht', 'Überblick und Verwaltung Ihrer Kunden'], clients: ['Kunden', 'Alle Firmen mit eigenem Konfigurator'], subs: ['Abonnements', 'Laufzeiten, Verlängerung und Sperre'], settings: ['Einstellungen', 'Standardwerte und Administratoren'], reports: ['Berichte', 'Zahlungen und Einnahmen'], system: ['System', 'Zustand und Verknüpfungen'] };
 function go(v) {
@@ -479,15 +516,16 @@ async function start() {
   show('vApp'); await load();
 }
 async function load() {
-  [companies, payments] = await Promise.all([
+  [companies, payments, evs] = await Promise.all([
     api('/rest/v1/companies?select=id,slug,name,contact_email,phone,active,paid_until,plan,price_eur,notes,created_at,offer_next,settings_updated_at&order=name.asc'),
-    api('/rest/v1/payments?select=id,company_id,amount_eur,paid_at,period_until,note&order=paid_at.desc').catch(() => [])
-  ]);
+    api('/rest/v1/payments?select=id,company_id,amount_eur,paid_at,period_until,note&order=paid_at.desc').catch(() => []),
+    api('/rest/v1/rpc/event_stats', { method: 'POST', body: { p_months: 12 } }).catch(() => [])
+  ]); if (!Array.isArray(evs)) evs = [];
   if (selId && !companies.some(c => c.id === selId)) selId = null;
   if (!selId && companies[0]) selId = companies[0].id;
   renderAll();
 }
-function renderAll() { renderStats(); renderTable(); renderDetail(); renderChart(); renderDonut(); renderAllTable(); renderSubs(); renderBell(); if (!document.querySelector('[data-view=reports]').hidden) renderReports(); }
+function renderAll() { renderStats(); renderTable(); renderDetail(); renderChart(); renderDonut(); renderReq(); renderAllTable(); renderSubs(); renderBell(); if (!document.querySelector('[data-view=reports]').hidden) renderReports(); }
 
 function renderStats() {
   const st = companies.map(statusOf), monthAgo = iso(new Date(Date.now() - 30 * 864e5));
@@ -498,6 +536,8 @@ function renderStats() {
   $('sLive').textContent = live.length;
   $('sDue').textContent = st.filter(s => s[0] === 'warn').length; $('dDue').textContent = st.some(s => s[0] === 'warn' || s[0] === 'bad') ? '!' : '';
   const mrr = live.reduce((a, c) => a + monthly(c), 0); $('sMrr').textContent = eur(mrr);
+  const rq = ev(null, REQ, [MK(0)]), rp = ev(null, REQ, [MK(1)]); $('sReq').textContent = rq;
+  $('dReq').textContent = rp ? (rq >= rp ? '↑ +' : '↓ ') + Math.round((rq - rp) / rp * 100) + ' %' : (rq ? '↑ neu' : '');
   const m = monthTotals(2); $('dMrr').textContent = m[0] ? (m[1] >= m[0] ? '↑ +' : '↓ ') + Math.round((m[1] - m[0]) / m[0] * 100) + ' %' : '';
 }
 function filtered() { const q = $('q').value.trim().toLowerCase(); return companies.filter(c => !q || (c.name + ' ' + c.slug + ' ' + (c.contact_email || '')).toLowerCase().includes(q)); }
@@ -505,7 +545,7 @@ const actBtns = (c) => `<div class="acts"><button class="ib e" data-act="edit" d
 function renderTable() {
   const list = filtered(), pages = Math.max(1, Math.ceil(list.length / PER)); page = Math.min(page, pages);
   const part = list.slice((page - 1) * PER, page * PER);
-  $('tb').innerHTML = part.map(c => { const [k, s] = statusOf(c); return `<tr class="row${c.id === selId ? ' sel' : ''}" data-id="${c.id}"><td><b>${esc(c.name)}</b></td><td><span class="pill ${k}">${s}</span></td><td>${dfmt(c.paid_until)}</td><td>${actBtns(c)}</td></tr>`; }).join('');
+  $('tb').innerHTML = part.map(c => { const [k, s] = statusOf(c); return `<tr class="row${c.id === selId ? ' sel' : ''}" data-id="${c.id}"><td><b>${esc(c.name)}</b></td><td><span class="pill ${k}">${s}</span></td><td>${dfmt(c.paid_until)}</td><td><span class="pill gold">${ev(c.id, REQ, [MK(0)])}</span></td><td>${actBtns(c)}</td></tr>`; }).join('');
   $('empty').hidden = companies.length > 0;
   $('pgInfo').textContent = list.length ? `Angezeigt ${(page - 1) * PER + 1}–${Math.min(page * PER, list.length)} von ${list.length} Kunden` : '';
   let b = ''; for (let i = 1; i <= pages; i++) b += `<button data-pg="${i}" aria-current="${i === page}">${i}</button>`;
@@ -537,7 +577,8 @@ async function renderDetail() {
       ${c.contact_email || co.email ? `<li>${ico('mail')}<a href="mailto:${esc(c.contact_email || co.email)}">${esc(c.contact_email || co.email)}</a></li>` : ''}
       ${c.phone || co.phone ? `<li>${ico('phone')}<a href="tel:${esc(c.phone || co.phone)}">${esc(c.phone || co.phone)}</a></li>` : ''}
       ${co.web ? `<li>${ico('web')}<a href="${/^https?:/.test(co.web) ? esc(co.web) : 'https://' + esc(co.web)}" target="_blank" rel="noopener">${esc(co.web)}</a></li>` : ''}
-      <li>${ico('web')}<a href="${esc(link)}" target="_blank" rel="noopener" class="mono">?firma=${esc(c.slug)}</a></li></ul></div></div>
+      <li>${ico('web')}<a href="${esc(link)}" target="_blank" rel="noopener" class="mono">?firma=${esc(c.slug)}</a></li></ul>
+      <div class="kpis"><span>Anfragen (Monat): <b>${ev(c.id, REQ, [MK(0)])}</b></span><span>Aufrufe: <b>${ev(c.id, ['view'], [MK(0)])}</b></span><span>12 Monate: <b>${ev(c.id, REQ, lastMonths(12))}</b></span></div></div></div>
       <div class="sub"><span style="display:flex;gap:10px;align-items:center">${ico('cal').replace('<svg>', '<svg width="20" height="20" style="color:var(--muted)">')}Abo gültig bis: <b>${c.paid_until ? dfmt(c.paid_until) : 'unbegrenzt'}</b></span><button class="btn" data-act="renew" data-id="${c.id}">${ico('renew')}Verlängern</button></div>
       <div class="chk"><div><b>Einstellungen des Kunden</b><ul>
         <li>${ok(hasPrices)}Preise: ${hasPrices ? 'individuell' : 'Standard'}</li>
@@ -558,31 +599,58 @@ function monthTotals(n) {
   for (let i = n - 1; i >= 0; i--) { const d = new Date(now.getFullYear(), now.getMonth() - i, 1), key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); out.push(payments.filter(p => (p.paid_at || '').startsWith(key)).reduce((a, p) => a + (+p.amount_eur || 0), 0)); }
   return out;
 }
-function renderChart() {
-  const n = +$('range').value, vals = monthTotals(n), now = new Date();
-  const labels = vals.map((_, i) => new Intl.DateTimeFormat('de-DE', { month: 'short' }).format(new Date(now.getFullYear(), now.getMonth() - (n - 1 - i), 1)));
-  const W = 640, H = 220, L = 52, R = 16, T = 14, B = 30, max = Math.max(100, ...vals), step = Math.pow(10, Math.floor(Math.log10(max))) * (max / Math.pow(10, Math.floor(Math.log10(max))) > 5 ? 2 : 1) / 2;
-  const top = Math.ceil(max / step) * step, x = (i) => L + (W - L - R) * (n === 1 ? .5 : i / (n - 1)), y = (v) => T + (H - T - B) * (1 - v / top);
-  let g = ''; for (let v = 0; v <= top + 1e-9; v += step) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="#e4e9f2"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="#5b6476">${new Intl.NumberFormat('de-DE').format(v)}</text>`;
+const MK = (i) => { const n = new Date(), d = new Date(n.getFullYear(), n.getMonth() - i, 1); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
+const REQ = ['pdf', 'mail'];
+// Anfragen / Aufrufe: cid = Firma oder null (alle), kinds, months = Liste 'YYYY-MM'
+function ev(cid, kinds, months, field = 'n') { return evs.filter(e => (!cid || e.company_id === cid) && kinds.includes(e.kind) && months.includes(e.month)).reduce((a, e) => a + (+e[field] || 0), 0); }
+const lastMonths = (n) => Array.from({ length: n }, (_, i) => MK(n - 1 - i));
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function lineChart(el, vals, labels, fmt, color) {
+  const n = vals.length, W = 640, H = 220, L = 52, R = 16, T = 14, B = 30, max = Math.max(fmt === eur ? 100 : 5, ...vals);
+  const mag = Math.pow(10, Math.floor(Math.log10(max))), step = Math.max(fmt === eur ? 1 : 1, mag * (max / mag > 5 ? 2 : 1) / 2), top = Math.ceil(max / step) * step;
+  const x = (i) => L + (W - L - R) * (n === 1 ? .5 : i / (n - 1)), y = (v) => T + (H - T - B) * (1 - v / top), grid = css('--chart-grid'), mu = css('--muted');
+  let g = ''; for (let v = 0; v <= top + 1e-9; v += step) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" style="stroke:${grid}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" style="fill:${mu}">${new Intl.NumberFormat('de-DE').format(v)}</text>`;
   const pts = vals.map((v, i) => `${x(i)},${y(v)}`).join(' ');
-  $('chart').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Einnahmen pro Monat">${g}
-    ${labels.map((l, i) => `<line x1="${x(i)}" x2="${x(i)}" y1="${T}" y2="${H - B}" stroke="#eef1f6"/><text x="${x(i)}" y="${H - 9}" text-anchor="middle" font-size="12" fill="#5b6476">${l}</text>`).join('')}
-    <polygon points="${x(0)},${y(0)} ${pts} ${x(n - 1)},${y(0)}" fill="#1769e81f"/>
-    <polyline points="${pts}" fill="none" stroke="#1769e8" stroke-width="2.5"/>
-    ${vals.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="4.5" fill="#1769e8"><title>${labels[i]}: ${eur(v)}</title></circle>`).join('')}</svg>
-    <p class="muted" style="margin:6px 0 0">Summe der eingetragenen Zahlungen: ${eur(vals.reduce((a, b) => a + b, 0))}</p>`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Diagramm">${g}
+    ${labels.map((l, i) => `<text x="${x(i)}" y="${H - 9}" text-anchor="middle" font-size="12" style="fill:${mu}">${l}</text>`).join('')}
+    <polygon points="${x(0)},${y(0)} ${pts} ${x(n - 1)},${y(0)}" style="fill:${color};fill-opacity:.14"/>
+    <polyline points="${pts}" fill="none" style="stroke:${color}" stroke-width="2.5" stroke-linejoin="round"/>
+    ${vals.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="4.5" style="fill:${color}"><title>${labels[i]}: ${fmt(v)}</title></circle>`).join('')}</svg>`;
 }
-$('range').onchange = renderChart;
+function renderChart() {
+  const n = +$('range').value, kind = $('chartKind').value, ms = lastMonths(n);
+  const labels = ms.map(m => new Intl.DateTimeFormat('de-DE', { month: 'short' }).format(new Date(m + '-15')));
+  const num = (v) => new Intl.NumberFormat('de-DE').format(v);
+  const vals = kind === 'rev' ? monthTotals(n) : ms.map(m => ev(null, kind === 'req' ? REQ : ['view'], [m]));
+  lineChart($('chart'), vals, labels, kind === 'rev' ? eur : num, css('--acc'));
+  const sum = vals.reduce((a, b) => a + b, 0);
+  $('chartSum').textContent = kind === 'rev' ? 'Summe der eingetragenen Zahlungen: ' + eur(sum) : (kind === 'req' ? 'Anfragen (PDF + E-Mail) aller Konfiguratoren: ' : 'Aufrufe aller Konfiguratoren: ') + num(sum);
+}
+$('range').onchange = renderChart; $('chartKind').onchange = renderChart;
 function renderDonut() {
   const st = companies.map(statusOf), a = st.filter(s => s[0] === 'ok').length, w = st.filter(s => s[0] === 'warn').length, o = st.length - a - w, tot = st.length || 1;
-  const C = 2 * Math.PI * 62; let off = 0;
-  const seg = (v, col) => { const len = C * v / tot, s = `<circle r="62" cx="90" cy="90" fill="none" stroke="${col}" stroke-width="26" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-off}" transform="rotate(-90 90 90)"/>`; off += len; return v ? s : ''; };
-  $('donut').innerHTML = `<svg viewBox="0 0 180 180" role="img" aria-label="Status der Abonnements"><circle r="62" cx="90" cy="90" fill="none" stroke="#eef1f5" stroke-width="26"/>${seg(a, '#16a34a')}${seg(w, '#f59f00')}${seg(o, '#c9d0dc')}
-    <text x="90" y="92" text-anchor="middle" font-size="30" font-weight="800" fill="#101828">${st.length ? Math.round(a / tot * 100) : 0}%</text><text x="90" y="114" text-anchor="middle" font-size="12" font-weight="700" fill="#5b6476">aktiv</text></svg>
-    <ul class="leg"><li><i style="background:#16a34a"></i>Aktiv (${a})</li><li><i style="background:#f59f00"></i>Laufen ab (${w})</li><li><i style="background:#c9d0dc"></i>Gesperrt / überfällig (${o})</li></ul>`;
+  const C = 2 * Math.PI * 62, cA = css('--acc'), cW = css('--orange'), cO = css('--grey'); let off = 0;
+  const seg = (v, col) => { const len = C * v / tot, s = `<circle r="62" cx="90" cy="90" fill="none" style="stroke:${col}" stroke-width="26" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-off}" transform="rotate(-90 90 90)"/>`; off += len; return v ? s : ''; };
+  $('donut').innerHTML = `<svg viewBox="0 0 180 180" role="img" aria-label="Status der Abonnements"><circle r="62" cx="90" cy="90" fill="none" style="stroke:${css('--soft')}" stroke-width="26"/>${seg(a, cA)}${seg(w, cW)}${seg(o, cO)}
+    <text x="90" y="92" text-anchor="middle" font-size="30" font-weight="800" style="fill:${css('--ink')}">${st.length ? Math.round(a / tot * 100) : 0}%</text><text x="90" y="114" text-anchor="middle" font-size="12" font-weight="700" style="fill:${css('--muted')}">aktiv</text></svg>
+    <ul class="leg"><li><i style="background:${cA}"></i>Aktiv (${a})</li><li><i style="background:${cW}"></i>Laufen ab (${w})</li><li><i style="background:${cO}"></i>Gesperrt / überfällig (${o})</li></ul>`;
 }
+function reqMonths() { const v = $('reqRange').value; return v === 'last' ? [MK(1)] : v === '12' ? lastMonths(12) : [MK(0)]; }
+function renderReq() {
+  const ms = reqMonths(), rows = companies.map(c => ({ c, pdf: ev(c.id, ['pdf'], ms), mail: ev(c.id, ['mail'], ms), view: ev(c.id, ['view'], ms), val: ev(c.id, REQ, ms, 'amount_eur') }))
+    .sort((a, b) => (b.pdf + b.mail) - (a.pdf + a.mail) || b.view - a.view);
+  const max = Math.max(1, ...rows.map(r => r.pdf + r.mail)), num = (v) => new Intl.NumberFormat('de-DE').format(v);
+  const tot = rows.reduce((a, r) => a + r.pdf + r.mail, 0), tv = rows.reduce((a, r) => a + r.view, 0);
+  $('reqSum').innerHTML = `<span><b>${num(tot)}</b> Anfragen</span><span><b>${num(tv)}</b> Aufrufe</span><span>Quote <b>${tv ? (tot / tv * 100).toLocaleString('de-DE', { maximumFractionDigits: 1 }) : 0} %</b></span><span>Angebotswert <b>${eur(rows.reduce((a, r) => a + r.val, 0))}</b></span>`;
+  $('reqBars').innerHTML = rows.map(r => `<div class="bar" data-id="${r.c.id}"><b style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.c.name)}</b>
+    <div class="tr" title="PDF: ${r.pdf} · E-Mail: ${r.mail}"><i style="width:${r.pdf / max * 100}%;background:var(--acc)"></i><i style="width:${r.mail / max * 100}%;background:var(--gold-2);opacity:.7"></i></div>
+    <span><b>${num(r.pdf + r.mail)}</b> <small>Anfr. · ${num(r.view)} Aufrufe${r.val ? ' · ' + eur(r.val) : ''}</small></span></div>`).join('') || '<div class="empty">Noch keine Kunden.</div>';
+}
+$('reqRange').onchange = renderReq;
+$('reqBars').onclick = (e) => { const b = e.target.closest('[data-id]'); if (b) { selId = b.dataset.id; renderTable(); renderDetail(); $('detail').scrollIntoView({ behavior: 'smooth', block: 'start' }); } };
+
 function renderAllTable() {
-  $('tbAll').innerHTML = companies.map(c => { const [k, s] = statusOf(c); return `<tr class="row" data-id="${c.id}"><td><b>${esc(c.name)}</b><div class="muted mono">?firma=${esc(c.slug)}</div></td><td><span class="pill ${k}">${s}</span></td><td class="hide-s">${esc(c.contact_email || '–')}<div class="muted">${esc(c.phone || '')}</div></td><td class="hide-s">${esc(c.plan)} · ${eur(c.price_eur, 2)}</td><td>${dfmt(c.paid_until)}</td><td class="hide-s">${Math.max(0, (c.offer_next || 1) - 1)}</td><td>${actBtns(c)}</td></tr>`; }).join('') || '<tr><td colspan="7" class="empty">Noch keine Kunden.</td></tr>';
+  $('tbAll').innerHTML = companies.map(c => { const [k, s] = statusOf(c); return `<tr class="row" data-id="${c.id}"><td><b>${esc(c.name)}</b><div class="muted mono">?firma=${esc(c.slug)}</div></td><td><span class="pill ${k}">${s}</span></td><td class="hide-s">${esc(c.contact_email || '–')}<div class="muted">${esc(c.phone || '')}</div></td><td class="hide-s">${esc(c.plan)} · ${eur(c.price_eur, 2)}</td><td>${dfmt(c.paid_until)}</td><td class="hide-s"><b>${ev(c.id, REQ, [MK(0)])}</b> / ${ev(c.id, REQ, lastMonths(12))}</td><td class="hide-s">${ev(c.id, ['view'], [MK(0)])}</td><td>${actBtns(c)}</td></tr>`; }).join('') || '<tr><td colspan="8" class="empty">Noch keine Kunden.</td></tr>';
 }
 function renderSubs() {
   const list = [...companies].sort((a, b) => (a.paid_until || '9999') < (b.paid_until || '9999') ? -1 : 1);
@@ -758,8 +826,11 @@ async function loadStats() {
   const draw = () => { $('stList').innerHTML = [
     ['Kunde seit', dfmt((cur.created_at || '').slice(0, 10))], ['Erstellte Angebote (PDF)', Math.max(0, (cur.offer_next || 1) - 1)], ['Nächste Angebotsnummer', cur.offer_next || 1],
     ['Einstellungen zuletzt geändert', cur.settings_updated_at ? new Date(cur.settings_updated_at).toLocaleString('de-DE') : '–'], ['Logins', logins],
+    ['Anfragen diesen Monat', ev(cur.id, REQ, [MK(0)])], ['Anfragen letzter Monat', ev(cur.id, REQ, [MK(1)])], ['Anfragen letzte 12 Monate', ev(cur.id, REQ, lastMonths(12))],
+    ['Aufrufe diesen Monat', ev(cur.id, ['view'], [MK(0)])], ['Angebotswert der Anfragen (12 M.)', eur(ev(cur.id, REQ, lastMonths(12), 'amount_eur'))],
     ['Bezahlt insgesamt', eur(sum, 2) + ' (' + pay.length + ' Zahlungen)'], ['Abo-Einnahmen pro Monat', eur(monthly(cur), 2)]
-  ].map(([k, v]) => `<div class="li"><span>${k}</span><b>${esc(v)}</b></div>`).join(''); };
+  ].map(([k, v]) => `<div class="li"><span>${k}</span><b>${esc(v)}</b></div>`).join('') + '<h4>Anfragen pro Monat</h4><div id="stChart" class="chart"></div>';
+    const ms = lastMonths(12); lineChart($('stChart'), ms.map(m => ev(cur.id, REQ, [m])), ms.map(m => new Intl.DateTimeFormat('de-DE', { month: 'short' }).format(new Date(m + '-15'))), (v) => String(v), css('--acc')); };
   draw(); try { const r = await fx({ action: 'list_members', company_id: cur.id }); logins = (r.members || []).length; } catch (e) { logins = '–'; } draw();
 }
 

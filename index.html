@@ -5210,7 +5210,7 @@ async function makePdf(kind) {
         pdf.setPage(pg + 1); pdf.link((r.left - sheet.getBoundingClientRect().left) * k, (yTop - pg * PHpx) * k, r.width * k, r.height * k, { url }); pdf.setPage(pages); } }
     pdf.setProperties({ title: `${t('pdfTitle')} ${no}` });
     const blob = pdf.output('blob');
-    if (!window.__sampleCust) offerNoBump();
+    if (!window.__sampleCust) { offerNoBump(); try { srvTrack(mail ? 'mail' : 'pdf', DATA.showPrices === false ? null : quote().total); } catch (e) {} }
     const filename = `${t('pdfTitle')}-${no}-${(c.name || '').replace(/[^\p{L}\p{N}]+/gu, '-')}.pdf`.replace(/-+/g, '-');
     if (mail) {
       // pregătit pentru trimitere; butonul „Deschide e-mailul” pornește trimiterea (are nevoie de un clic nou)
@@ -5325,6 +5325,10 @@ function srvBlock(kind, name) {
   document.body.appendChild(d);
 }
 function srvSession() { try { const s = JSON.parse(sessionStorage.getItem('vp3d-srv') || 'null'); if (s && s.slug === FIRMA && s.exp > Date.now() + 60000) return s; } catch (e) {} return null; }
+// Statistik: Aufruf / Anfrage melden (ohne Kundendaten)
+function srvTrack(kind, amount) { if (!FIRMA || window.__srvOff) return; try { if (sessionStorage.getItem('vp3d-srv')) return; } catch (e) {}
+  if (kind === 'view') { try { const k = 'vp3d-v-' + FIRMA; if (sessionStorage.getItem(k)) return; sessionStorage.setItem(k, '1'); } catch (e) {} }
+  sbFetch('/rest/v1/rpc/track_event', { body: { p_slug: FIRMA, p_kind: kind, p_amount: amount == null ? null : Math.round(amount * 100) / 100 } }).catch(() => {}); }
 async function srvOfferNo() { try { const n = await sbFetch('/rest/v1/rpc/take_offer_no', { body: { p_slug: FIRMA } }); if (typeof n === 'number' && n > 0) { DATA.offerNo = n + 1; return n; } } catch (e) {} return DATA.offerNo || 1; }
 async function loadSettings() {
   if (FIRMA) {
@@ -5332,6 +5336,7 @@ async function loadSettings() {
       const r = await sbFetch('/rest/v1/rpc/get_config', { body: { p_slug: FIRMA } });
       if (!r || r.status !== 'ok') { srvBlock('off', r && r.name); window.__srvOff = true; return; }
       applySettings(r.settings || {}); window.__srvName = r.name;
+      setTimeout(() => srvTrack('view'), 1500);
     } catch (e) { srvBlock('net'); window.__srvOff = true; }
     return;
   }
